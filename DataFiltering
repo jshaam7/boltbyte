@@ -1,0 +1,15 @@
+echo "# boltbyte" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/jshaam7/boltbyte.git
+git push -u origin main
+
+# Finds the number of unique cutomers (by selecting non-repeated customer IDs) to the store.
+# This helps us to determine customer retention and customer repeat rate
+data <- read.csv("/Users/daksh/ByteStoreDataset.csv", header = TRUE, sep = ",")
+unique_names <- unique(data$Customer_ID)
+print(length(unique_name))
+
+Output: 16134

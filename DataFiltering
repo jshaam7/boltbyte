@@ -6,10 +6,117 @@ git branch -M main
 git remote add origin https://github.com/jshaam7/boltbyte.git
 git push -u origin main
 
-# Finds the number of unique cutomers (by selecting non-repeated customer IDs) to the store.
+# Part 1
+# Finds the number of unique customers (by selecting non-repeated customer IDs) to the store.
 # This helps us to determine customer retention and customer repeat rate
+
 data <- read.csv("/Users/daksh/ByteStoreDataset.csv", header = TRUE, sep = ",")
-unique_names <- unique(data$Customer_ID)
-print(length(unique_name))
+number_of_unique_customers <- unique(data$Customer_ID)
+print(length(number_of_unique_customers))
 
 Output: 16134
+
+# Part 2
+# Finds the total quantity of each item sold in the given period
+# This is one parameter that helps us identify the most popular item
+
+quantity_by_category <- aggregate(Quantity ~ SKU_Category, data, sum)
+print(quantity_by_category)
+
+Output: 
+
+    SKU_Category  Quantity
+1         Blazer  3790.000
+2  Bomber jacket  3555.000
+3    Cargo pants  5218.000
+4       Crop Top  3352.000
+5    Dress shirt  5599.500
+6        Dresses  8210.043
+7            Hat  8112.000
+8         Hoodie  5623.000
+9          Jeans  3077.000
+10         Shoes  3345.000
+11        Shorts  7958.840
+12         Skirt  4639.000
+13    Sunglasses  3884.670
+14       T-shirt 12148.000
+15   Trench coat  2862.100
+
+# Part 3
+# Finds the total sales of each item sold in the given period
+# This is another parameter that helps us identify the most popular item
+
+sales_by_category <- aggregate(Sales_Amount ~ SKU_Category, data, sum)
+print(sales_by_category)
+
+Output:
+
+    SKU_Category Sales_Amount
+1         Blazer     223071.2
+2  Bomber jacket     355281.4
+3    Cargo pants     320094.4
+4       Crop Top     319283.4
+5    Dress shirt     258777.1
+6        Dresses     849219.1
+7            Hat     376182.2
+8         Hoodie     347845.9
+9          Jeans     219282.6
+10         Shoes     329195.8
+11        Shorts     282306.5
+12         Skirt     298751.4
+13    Sunglasses     544701.6
+14       T-shirt     491195.5
+15   Trench coat     289162.3
+
+# Part 4
+# Finds the total operational cost for each item in the given period
+# This is a parameter that helps us identify a primary operational cost of the store
+
+operational_cost_by_category <- aggregate(Operational_Cost ~ SKU_Category, data, sum)
+print(operational_cost_by_category)
+
+Output:
+
+    SKU_Category Operational_Cost
+1         Blazer         127072.9
+2  Bomber jacket         185525.4
+3    Cargo pants         207034.2
+4       Crop Top         232837.1
+5    Dress shirt         116714.5
+6        Dresses         462037.1
+7            Hat         164074.2
+8         Hoodie         220285.9
+9          Jeans         135218.7
+10         Shoes         206946.3
+11        Shorts         139801.3
+12         Skirt         211947.5
+13    Sunglasses         371593.4
+14       T-shirt         305226.3
+15   Trench coat         133401.4
+
+# Part 5
+# Finds the total profits (in $) for each item in the given period
+# This is another parameter that helps us identify the best-performing items in the store 
+
+profit_by_category <- aggregate(Sales_Amount - Operational_Cost ~ SKU_Category, data, sum)
+colnames(profit_by_category)[2] <- "Profits (in $)"
+print(profit_by_category)
+
+    SKU_Category  Profits (in $)
+1         Blazer  95998.3
+2  Bomber jacket 169756.0
+3    Cargo pants 113060.2
+4       Crop Top  86446.3
+5    Dress shirt 142062.6
+6        Dresses 387182.0
+7            Hat 212108.0
+8         Hoodie 127560.0
+9          Jeans  84063.9
+10         Shoes 122249.5
+11        Shorts 142505.2
+12         Skirt  86803.9
+13    Sunglasses 173108.2
+14       T-shirt 185969.2
+15   Trench coat 155760.9
+
+

@@ -42,6 +42,11 @@ Output:
 14       T-shirt 12148.000
 15   Trench coat  2862.100
 
+Here is code for a data visualization of the same:
+
+barplot(quantity_by_category$Quantity, names.arg = quantity_by_category$Category, main = "Sum of Quantity by Category", xlab = "Category", ylab = "Sum of Quantity",
+col = "blue")
+
 # Part 3
 # Finds the total sales of each item sold in the given period
 # This is another parameter that helps us identify the most popular item

@@ -25,7 +25,7 @@ print(quantity_by_category)
 
 Output: 
 
-    SKU_Category  Quantity
+    SKU_Category  Quantity 
 1         Blazer  3790.000
 2  Bomber jacket  3555.000
 3    Cargo pants  5218.000
@@ -101,6 +101,8 @@ Output:
 profit_by_category <- aggregate(Sales_Amount - Operational_Cost ~ SKU_Category, data, sum)
 colnames(profit_by_category)[2] <- "Profits (in $)"
 print(profit_by_category)
+
+Output:
 
     SKU_Category  Profits (in $)
 1         Blazer  95998.3

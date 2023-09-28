@@ -44,8 +44,13 @@ Output:
 
 Here is code for a data visualization of the same:
 
-barplot(quantity_by_category$Quantity, names.arg = quantity_by_category$Category, main = "Sum of Quantity by Category", xlab = "Category", ylab = "Sum of Quantity",
-col = "blue")
+barplot(quantity_by_category$Quantity, names.arg = quantity_by_category$SKU_Category, main = "Total items sold by category",  col = "blue", 
+las = 2, col.axis = "red", col.lab = "red", cex.lab = 1.5, cex.main = 2,  font.main = 2)  
+xlab_text <- "Category"
+mtext(text = xlab_text, side = 1, line = 3.8, cex = 1.5, col.axis = "black")  
+# Customize the y-axis label ("Total items sold") color to black
+ylab_text <- "Total items sold"
+mtext(text = ylab_text, side = 2, line = 3.5, cex = 1.5, col.axis = "black")  
 
 # Part 3
 # Finds the total sales of each item sold in the given period
@@ -73,6 +78,17 @@ Output:
 14       T-shirt     491195.5
 15   Trench coat     289162.3
 
+Here is the code for data visualization of the same:
+
+install.packages("scales")
+library(scales)
+sales_percent <- percent(sales_by_category$Sales_Amount / sum(sales_by_category$Sales_Amount))
+labels <- paste(sales_by_category$SKU_Category, "\n", sales_percent)
+pie(sales_by_category$Sales_Amount, labels = labels, 
+    main = "Sales Distribution by Category", 
+    cex = 0.5, 
+    col = rainbow(length(sales_by_category$Sales_Amount)))  
+
 # Part 4
 # Finds the total operational cost for each item in the given period
 # This is a parameter that helps us identify a primary operational cost of the store
@@ -98,6 +114,21 @@ Output:
 13    Sunglasses         371593.4
 14       T-shirt         305226.3
 15   Trench coat         133401.4
+
+Here is code for data visualization of the same:
+
+library(ggplot2)
+ggplot(operational_cost_by_category, aes(x = "", y = Operational_Cost, fill = SKU_Category)) +
+  geom_bar(stat = "identity") +
+  coord_polar(theta = "y") +  
+  labs(title = "\n\nPie Chart of Operational Costs by SKU Category") +  
+  geom_text(aes(label = scales::percent(Operational_Cost/sum(Operational_Cost), accuracy = 0.01)), 
+            position = position_stack(vjust = 0.5),
+            size = 2) +  
+  theme_void() +  
+  theme(
+    plot.title = element_text(hjust = 0.5, vjust = 3)  
+  )
 
 # Part 5
 # Finds the total profits (in $) for each item in the given period
@@ -125,5 +156,63 @@ Output:
 13    Sunglasses 173108.2
 14       T-shirt 185969.2
 15   Trench coat 155760.9
+
+Here is the code for data visualization of the same:
+
+library(ggplot2)
+ggplot(profit_by_category, aes(x = reorder(SKU_Category, -`Profits (in $)`), y = `Profits (in $)`)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(x = "SKU Category", y = "Profits (in $)", title = "Profits by SKU Category") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, color = "blue"), 
+        axis.text.y = element_text(color = "red")) + 
+  coord_flip() +  
+  scale_y_continuous(labels = scales::comma) +  
+  theme(plot.title = element_text(hjust = 0.5))  
+
+# Part 6
+# Categorise the buyers by age to find out which items are most popular in each age category
+# This is another parameter which helps the store identify which items to have a higher/lower stock for
+
+age_groups <- cut(data$Customer_Age, breaks = c(20, 30, 40, 50, 60, 70), labels = c("20-30", "30-40", "40-50", "50-60", "60-70"))
+count_table <- table(data$SKU_Category, age_groups)
+count_data <- as.data.frame.matrix(count_table)
+colnames(count_data) <- c("20-30", "30-40", "40-50", "50-60", "60-70")
+print(count_data)
+
+Output:
+
+              20-30 30-40 40-50 50-60 60-70
+Blazer          653   739   778   749    78
+Bomber jacket   581   697   666   589    46
+Cargo pants    1054  1272  1310  1050   118
+Crop Top        564   763   753   669    69
+Dress shirt     569   708   741   683    43
+Dresses        1041  1353  1294  1235   102
+Hat             903  1142  1118  1044    79
+Hoodie         1005  1377  1356  1191   118
+Jeans           641   786   793   714    60
+Shoes           688   883   814   694    56
+Shorts          934  1254  1184  1037   130
+Skirt          1017  1133  1203  1015    94
+Sunglasses      599   825   674   669    43
+T-shirt        2307  2746  2949  2572   234
+Trench coat     472   597   607   558    49
+
+Here is the code for data visualization of the same:
+
+count_data_transposed <- as.data.frame(t(count_data))
+count_data_transposed$SKU_Category <- row.names(count_data_transposed)
+barplot(as.matrix(count_data_transposed[, 1:5]), beside = TRUE, 
+        names.arg = count_data_transposed$SKU_Category, 
+        main = "Buyers by Age Group for Each Product Category",
+        xlab = "Product Category",
+        ylab = "Number of buyers",
+        col = rainbow(5),
+        ylim = c(0, max(count_data_transposed[, 1:5]) + 10))
+legend("topright", legend = colnames(count_data_transposed)[1:5], fill = rainbow(5), cex = 0.8,
+       xjust = 1, yjust = 1)
+
+
+
 
 

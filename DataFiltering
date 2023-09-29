@@ -45,12 +45,12 @@ Output:
 Here is code for a data visualization of the same:
 
 barplot(quantity_by_category$Quantity, names.arg = quantity_by_category$SKU_Category, main = "Total items sold by category",  col = "blue", 
-las = 2, col.axis = "red", col.lab = "red", cex.lab = 1.5, cex.main = 2,  font.main = 2)  
+las = 2, col.axis = "red", col.lab = "red", cex.lab = 1.5, cex.main = 2,  font.main = 2, cex.names = 0.7, cex.axis = 0.7)  
 xlab_text <- "Category"
 mtext(text = xlab_text, side = 1, line = 3.8, cex = 1.5, col.axis = "black")  
 # Customize the y-axis label ("Total items sold") color to black
 ylab_text <- "Total items sold"
-mtext(text = ylab_text, side = 2, line = 3.5, cex = 1.5, col.axis = "black")  
+mtext(text = ylab_text, side = 2, line = 2.5, cex = 1.5, col.axis = "black")  
 
 # Part 3
 # Finds the total sales of each item sold in the given period
@@ -162,12 +162,14 @@ Here is the code for data visualization of the same:
 library(ggplot2)
 ggplot(profit_by_category, aes(x = reorder(SKU_Category, -`Profits (in $)`), y = `Profits (in $)`)) +
   geom_bar(stat = "identity", fill = "skyblue") +
-  labs(x = "SKU Category", y = "Profits (in $)", title = "Profits by SKU Category") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, color = "blue"), 
+  geom_text(aes(label = scales::comma(`Profits (in $)`), y = `Profits (in $)`), vjust = -0.5) +  # Add text labels
+  labs(x = "SKU Category", y = "Profits (in $)", title = "Profits by Category") +
+  theme(axis.text.x = element_text(angle = 0, hjust = 1, color = "blue"),  # Rotate labels to 0 degrees
         axis.text.y = element_text(color = "red")) + 
-  coord_flip() +  
   scale_y_continuous(labels = scales::comma) +  
-  theme(plot.title = element_text(hjust = 0.5))  
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_flip()
+  
 
 # Part 6
 # Categorise the buyers by age to find out which items are most popular in each age category
@@ -204,7 +206,7 @@ count_data_transposed <- as.data.frame(t(count_data))
 count_data_transposed$SKU_Category <- row.names(count_data_transposed)
 barplot(as.matrix(count_data_transposed[, 1:5]), beside = TRUE, 
         names.arg = count_data_transposed$SKU_Category, 
-        main = "Buyers by Age Group for Each Product Category",
+        main = "Buyers by Age Group for Some Product Categories",
         xlab = "Product Category",
         ylab = "Number of buyers",
         col = rainbow(5),
